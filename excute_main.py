@@ -1,8 +1,8 @@
 # import installed_module
-from pymongo import *
+from pymongo import MongoClient
 from multiprocessing import Process, Lock, Value
 import RPi.GPIO as GPIO
-
+import sys
 
 # import user_defined_module
 from controlLed import startSignalLed
@@ -21,7 +21,12 @@ MAIN_LED = []
 TIME_LED = []
 
 if __name__ == '__main__':
-  client = MongoClient(config.mongoURI)
+  try:
+    client = MongoClient(config.mongoURI)
+  except:
+    print('Database connect error')
+    sys.exit()
+  
 
   sharedCount = Value('i', 0)
   lock = Lock()

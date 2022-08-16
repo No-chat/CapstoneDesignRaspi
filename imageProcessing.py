@@ -22,10 +22,11 @@ def mainVideo(client, sharedCount, lock):
     
     # data 삽입 test
     if keyboard.is_pressed('q'):
+      date_now = datetime.datetime.now()
       data = {
         'carNumber' : '12가3456',
         'carSpeed' : 70,
-        'date' : datetime.datetime.now()
+        'date' : date_now
       }
       controlDB.saveDataToDB(client, data)
       break
