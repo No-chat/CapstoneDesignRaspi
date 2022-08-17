@@ -1,34 +1,38 @@
 import RPi.GPIO as GPIO
 import time
-import keyboard
 
 
-def startSignalLed(main_channel, time_channel, sharedCount, lock):
+
+def startSignalLed(main_channel, time_channel):
   while True:
     controlMainLed('RED', 10, main_channel[0])
-    controlMainLed('GREEN', 11, main_channel[1], time_channel, sharedCount, lock)
+    controlMainLed('GREEN', 11, main_channel[1], time_channel)
     controlMainLed('YELLOW', 1, main_channel[2])
-    if keyboard.is_pressed('q'):
-      break
 
 
-def controlMainLed(color, delay, main_channel, time_channel = None, sharedCount = 0, lock = None):  
+
+def controlMainLed(color, delay, main_channel, time_channel = None):  
   GPIO.output(main_channel, GPIO.HIGH)
+
   if color == 'GREEN':
-    controlTimeLed(time_channel, sharedCount, lock)
+    controlTimeLed(time_channel)
   else:
     time.sleep(delay)
+
   GPIO.output(main_channel, GPIO.LOW)
 
 
-def controlTimeLed(channels, sharedCount, lock):
-  with lock:
-    sharedCount.value = 10
+def controlTimeLed(channels):
+  global TIME_COUNTER
+  time = [11,10,9,8,7,6,5,4,3,2,1]
+  
   for channel in channels:
     GPIO.output(channel, GPIO.HIGH)
   
   for channel in channels:
-    time.sleep(1)
-    with lock:
-      sharedCount.value -= 1
+    TIME_COUNTER = time[channels.index(channel)]
+    time.sleep(0.04)
+    TIME_COUNTER = 0
+    time.sleep(0.96)
+    
     GPIO.output(channel, GPIO.LOW)

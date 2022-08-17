@@ -1,11 +1,11 @@
 # import installed_module
 from pymongo import MongoClient
-from multiprocessing import Process, Lock, Value
+from threading import Thread
 import RPi.GPIO as GPIO
 import sys
 
 # import user_defined_module
-from controlLed import startSignalLed
+from controlLed import *
 from imageProcessing import mainVideo
 from config import config
 # mongodb+srv://<username>:<password>@capstoneserver.ujte3.mongodb.net/?retryWrites=true&w=majority
@@ -27,16 +27,11 @@ if __name__ == '__main__':
     print('Database connect error')
     sys.exit()
   
-
-  sharedCount = Value('i', 0)
-  lock = Lock()
-
-  p1 = Process(target=mainVideo, args = (client, sharedCount, lock))
-  p2 = Process(target=startSignalLed, args = (MAIN_LED, TIME_LED, sharedCount, lock))
-  p1.start()
-  p2.start()
-  p1.join()
-  p2.join()
+  
+  t1 = Thread(target=startSignalLed, args = (MAIN_LED, TIME_LED, ))
+  t1.start()
+  mainVideo(client, TIME_COUNTER)
+  t1.join()
 
   GPIO.cleanup()
   client.close()
