@@ -10,7 +10,7 @@ def mainVideo(client, TIME_COUNTER):
   capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
   capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-  fps = capture.get(cv2.CAP_PROP_FPS) #frame per second
+  fps = capture.get(cv2.CAP_PROP_FPS) 
   delay = round(1000/fps)
 
   if not capture.isOpened():
@@ -24,9 +24,10 @@ def mainVideo(client, TIME_COUNTER):
 
   NOW = datetime.datetime.now()
   data = {
-    'carNumber' : '',
+    'carNumber' : 'testdata',
     'carSpeed' : 0,
-    'date' : NOW
+    'date' : NOW,
+    'condition' : '촬영 시 해당하는 조건'
   }
     
   while True:
@@ -45,7 +46,7 @@ def mainVideo(client, TIME_COUNTER):
     
     # data 삽입 test
     elif key == ord('i'):
-      controlDB.saveDataToDB(client,)
+      controlDB.saveDataToDB(client, data)
   capture.release()
   cv2.destroyAllWindows()
 
