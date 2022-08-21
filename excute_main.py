@@ -21,7 +21,7 @@ MAIN_LED = [16,21,20]
 TIME_LED = [19,23,6,5,25,24,23,22,27,17,4]
 
 def main_func():
-  global t
+  
   for PIN in TIME_LED:
     GPIO.setup(PIN, GPIO.OUT)
   for PIN in MAIN_LED:
@@ -33,9 +33,9 @@ def main_func():
     sys.exit()
   
   
-  t1 = Thread(target=startSignalLed, args = (MAIN_LED, TIME_LED, t))
+  t1 = Thread(target=startSignalLed, args = (MAIN_LED, TIME_LED,))
   t1.start()
-  mainVideo(client, t)
+  mainVideo(client,)
   t1.join()
 
   GPIO.cleanup()
