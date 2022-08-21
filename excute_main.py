@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import sys
 
 # import user_defined_module
-from controlLed import t, startSignalLed
+from controlLed import startSignalLed
 from imageProcessing import mainVideo
 from config import config
 # mongodb+srv://<username>:<password>@capstoneserver.ujte3.mongodb.net/?retryWrites=true&w=majority
@@ -20,9 +20,8 @@ GPIO.setwarnings(False)
 MAIN_LED = [16,21,20]
 TIME_LED = [19,23,6,5,25,24,23,22,27,17,4]
 
-
-
-if __name__ == '__main__':
+def main_func():
+  global t
   for PIN in TIME_LED:
     GPIO.setup(PIN, GPIO.OUT)
   for PIN in MAIN_LED:
@@ -34,10 +33,13 @@ if __name__ == '__main__':
     sys.exit()
   
   
-  t1 = Thread(target=startSignalLed, args = (MAIN_LED, TIME_LED, ))
+  t1 = Thread(target=startSignalLed, args = (MAIN_LED, TIME_LED, t))
   t1.start()
   mainVideo(client, t)
   t1.join()
 
   GPIO.cleanup()
   client.close()
+
+if __name__ == '__main__':
+  main_func()

@@ -1,10 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-
-
-def startSignalLed(main_channel, time_channel):
-  global t
+def startSignalLed(main_channel, time_channel, t):
   while True:
     controlMainLed('RED', 10, main_channel[0])
     controlMainLed('GREEN', 11, main_channel[1], t, time_channel)
