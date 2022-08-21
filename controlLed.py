@@ -4,35 +4,35 @@ import time
 
 
 def startSignalLed(main_channel, time_channel):
+  global t
   while True:
     controlMainLed('RED', 10, main_channel[0])
-    controlMainLed('GREEN', 11, main_channel[1], time_channel)
+    controlMainLed('GREEN', 11, main_channel[1], t, time_channel)
     controlMainLed('YELLOW', 1, main_channel[2])
 
 
 
-def controlMainLed(color, delay, main_channel, time_channel = None):  
+def controlMainLed(color, delay, main_channel, t = None, time_channel = None):  
   GPIO.output(main_channel, GPIO.HIGH)
 
   if color == 'GREEN':
-    controlTimeLed(time_channel)
+    controlTimeLed(time_channel, t)
   else:
     time.sleep(delay)
 
   GPIO.output(main_channel, GPIO.LOW)
 
 
-def controlTimeLed(channels):
-  global TIME_COUNTER
-  time = [11,10,9,8,7,6,5,4,3,2,1]
+def controlTimeLed(channels, t):
+  time_arr = [11,10,9,8,7,6,5,4,3,2,1]
   
   for channel in channels:
     GPIO.output(channel, GPIO.HIGH)
   
   for channel in channels:
-    TIME_COUNTER = time[channels.index(channel)]
+    t = time_arr[channels.index(channel)]
     time.sleep(0.04)
-    TIME_COUNTER = 0
+    t = 0
     time.sleep(0.96)
     
     GPIO.output(channel, GPIO.LOW)

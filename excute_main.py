@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import sys
 
 # import user_defined_module
-import controlLed
+from controlLed import t, startSignalLed
 from imageProcessing import mainVideo
 from config import config
 # mongodb+srv://<username>:<password>@capstoneserver.ujte3.mongodb.net/?retryWrites=true&w=majority
@@ -34,9 +34,9 @@ if __name__ == '__main__':
     sys.exit()
   
   
-  t1 = Thread(target=controlLed.startSignalLed, args = (MAIN_LED, TIME_LED, ))
+  t1 = Thread(target=startSignalLed, args = (MAIN_LED, TIME_LED, ))
   t1.start()
-  mainVideo(client, controlLed.TIME_COUNTER)
+  mainVideo(client, t)
   t1.join()
 
   GPIO.cleanup()
