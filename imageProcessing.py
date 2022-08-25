@@ -1,11 +1,10 @@
 import cv2
 import datetime
 import sys
-
-from utils import controlDB
+import controlLed
 
 # main video에서 차량의 속도 추출해야함
-def mainVideo(client, TIME_COUNTER):
+def mainVideo(pipeline):
   capture = cv2.VideoCapture(0)
   capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
   capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
@@ -22,37 +21,38 @@ def mainVideo(client, TIME_COUNTER):
       print('get frame failed')
       sys.exit()
 
-  NOW = datetime.datetime.now()
-  data = {
-    'carNumber' : 'testdata',
-    'carSpeed' : 0,
-    'date' : NOW,
-    'condition' : '촬영 시 해당하는 조건'
-  }
     
   while True:
     ret, frame = capture.read()
     cv2.imshow('video', frame)
-
-    print(f"time: {TIME_COUNTER}")
+    NOW = datetime.datetime.now()
+    # print(f"time: {TIME_COUNTER}")
 
     key = cv2.waitKey(delay)
     if key == ord('q'):
       break
+    elif key == ord('c'):
+      data = {
+        'carNumber' : 'testdata',
+        'carSpeed' : 0,
+        'date' : NOW,
+        'condition' : '촬영 시 해당하는 조건',
+        'img' : frame
+      }
+      pipeline.put(data)
+    #print(controlLed.counter)
 
-    # 정해진 조건에 해당할 때 
-    # carNum = findCarNumber(frame) -> 차량번호 추출
-    # controlDB.saveDataToDB(data)
+    """
+    정해진 조건에 해당할 때 data정의 후 인자로 받은 queue에 넣어준다
+    data = {
+    'carNumber' : 'testdata',
+    'carSpeed' : 0,
+    'date' : NOW,
+    'condition' : '촬영 시 해당하는 조건',
+    'img' : frame
+    }
+    pipeline.put(data)
+    """
     
-    # data 삽입 test
-    elif key == ord('i'):
-      controlDB.saveDataToDB(client, data)
   capture.release()
   cv2.destroyAllWindows()
-
-
-# findNumberCar를 멀티 쓰레딩 하기 위한 def imageMain 함수
-# 또는 asyncio사용해서 바꿀 생각도 하고 있어야 함
-def imageMain():
-  if __name__ == "__main__":
-    print('hello')
