@@ -1,11 +1,10 @@
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 import pytesseract
 
 from utils import controlDB
 
-plt.style.use('dark_background')
+
 
 def extract_thread(pipeline, client):
   while True:
@@ -19,7 +18,6 @@ def extract_thread(pipeline, client):
       pipeline.task_done()
 
 def num_extract(img_ori):
-    img_ori = cv2.imread('capture1_2.jpg')
     img_ori = img_ori[360:720, :]
 
     height, width, channel = img_ori.shape
@@ -229,9 +227,6 @@ def num_extract(img_ori):
             'h': int(plate_height)
         })
         
-        plt.subplot(len(matched_result), 1, i+1)
-        plt.imshow(img_cropped, cmap='gray')
-
 
     # 이후부터 이미지 손실
 
@@ -283,21 +278,17 @@ def num_extract(img_ori):
                 if c.isdigit():
                     has_digit = True
                 result_chars += c
-        
+        # 번호판 후보 추출
         print(result_chars)
         plate_chars.append(result_chars)
 
         if has_digit and len(result_chars) > longest_text:
             longest_idx = i
 
-        plt.subplot(len(plate_imgs), 1, i+1)
-        plt.imshow(img_result, cmap='gray')
-
-
 
     info = plate_infos[longest_idx]
     chars = plate_chars[longest_idx]
-
+    # 최종 번호판 추출
     print(chars)
 
     img_out = img_ori.copy()
@@ -305,4 +296,4 @@ def num_extract(img_ori):
     cv2.rectangle(img_out, pt1=(info['x'], info['y']), pt2=(info['x']+info['w'], info['y']+info['h']), color=(255,0,0), thickness=2)
 
     cv2.imwrite(chars + '.jpg', img_out)
-    return result_chars
+    return chars
