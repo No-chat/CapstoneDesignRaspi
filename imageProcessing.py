@@ -12,10 +12,11 @@ class Car():
     self.condition = ''
     self.img = []
 
-  def setData(self, carSpeed, date, condition):
+  def setData(self, carSpeed, date, condition, img):
     self.carSpeed = carSpeed
     self.date = date
     self.condition = condition
+    self.img = img
 
 
 # main video에서 차량의 속도 추출해야함
@@ -48,7 +49,7 @@ def mainVideo(pipeline):
       break
     elif key == ord('c'):
       data = Car()
-      data.setData(60, NOW, '조건')
+      data.setData(60, NOW, '조건', frame)
       pipeline.put(data)
 
     """
