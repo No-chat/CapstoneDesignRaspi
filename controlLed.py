@@ -22,14 +22,11 @@ def controlMainLed(color, delay, main_channel, time_channel = None):
 
 def controlTimeLed(channels):
   time_arr = [11,10,9,8,7,6,5,4,3,2,1]
-  
+  global counter
   for channel in channels:
     GPIO.output(channel, GPIO.HIGH)
   
   for channel in channels:
-    #t = time_arr[channels.index(channel)]
-    time.sleep(0.04)
-    #t = 0
-    time.sleep(0.96)
-    
+    counter = time_arr[channels.index(channel)]
+    time.sleep(1)    
     GPIO.output(channel, GPIO.LOW)
