@@ -13,10 +13,10 @@ def extract_thread(pipeline, client):
         sleep(0.5)
         if not pipeline.empty():
             data = pipeline.get()
-            img = data.img
-            delattr(data, 'img')
+            img = data['img']
+            del data['img']
             carNumber = num_extract(img)
-            data.carNumber = carNumber
+            data['carNumber'] = carNumber
             controlDB.saveDataToDB(client, data)
             pipeline.task_done()
 
@@ -272,7 +272,7 @@ def num_extract(img_ori):
 
     # 번호판 인식후 배열 완료
     # 이미지 문자로 변환 시작
-        chars = pytesseract.image_to_string(img_result, lang='kor', config='--psm 7 --oem 0')
+        chars = pytesseract.image_to_string(img_result, lang='kor', config='--psm 7 --oem 1')
         
         result_chars = ''
         has_digit = False
