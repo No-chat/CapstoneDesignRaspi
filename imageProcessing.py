@@ -48,8 +48,13 @@ def mainVideo(pipeline):
     if key == ord('q'):
       break
     elif key == ord('c'):
-      data = Car()
-      data.setData(60, NOW, '조건', frame)
+      data = {
+        'carNumber' : '',
+        'carSpeed' : 0,
+        'date' : NOW,
+        'condition': '조건',
+        'img' : frame
+      }
       pipeline.put(data)
 
     """
