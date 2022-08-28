@@ -1,3 +1,4 @@
+from time import sleep
 import cv2
 import numpy as np
 import pytesseract
@@ -7,15 +8,17 @@ from utils import controlDB
 
 
 def extract_thread(pipeline, client):
-  while True:
-    if not pipeline.empty():
-      data = pipeline.get()
-      img = data.img
-      delattr(data, 'img')
-      carNumber = num_extract(img)
-      data.carNumber = carNumber
-      controlDB.saveDataToDB(client, data)
-      pipeline.task_done()
+    while True:
+        # Cpu 점유율을 낮춤
+        sleep(0.5)
+        if not pipeline.empty():
+            data = pipeline.get()
+            img = data.img
+            delattr(data, 'img')
+            carNumber = num_extract(img)
+            data.carNumber = carNumber
+            controlDB.saveDataToDB(client, data)
+            pipeline.task_done()
 
 def num_extract(img_ori):
     img_ori = img_ori[360:720, :]
@@ -294,6 +297,6 @@ def num_extract(img_ori):
     img_out = img_ori.copy()
 
     cv2.rectangle(img_out, pt1=(info['x'], info['y']), pt2=(info['x']+info['w'], info['y']+info['h']), color=(255,0,0), thickness=2)
-
+    
     cv2.imwrite(chars + '.jpg', img_out)
     return chars
