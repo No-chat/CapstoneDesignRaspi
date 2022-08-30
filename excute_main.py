@@ -19,8 +19,8 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
 # set ledpin
-MAIN_LED = [16,21,20]
-TIME_LED = [19,23,6,5,25,24,23,22,27,17,4]
+MAIN_LED = [19,16,13]
+TIME_LED = [4,18,17,27,23,22,24,25,5,12,16]
 
 def main_func():
   
