@@ -55,7 +55,6 @@ def mainVideo(pipeline):
     
   while True:
     ret, frame = capture.read()
-    cv2.imshow('video', frame)
     NOW = datetime.datetime.now()
     # print(f"time: {controlLed.counter}")
     roi = frame[0:480,0:640]
@@ -91,16 +90,16 @@ def mainVideo(pipeline):
             cv2.rectangle(roi, (x, y), (x + w, y + h), (0, 165, 255), 3)
 
         s = tracker.getsp(id)
-        if 0 < controlLed.counter < 3:
-          if s > 0.7:
-            data = {
-              'carNumber' : '',
-              'carSpeed' : 0,
-              'date' : NOW,
-              'condition': '조건',
-              'img' : frame
-            }
-            pipeline.put(data)
+        #if 0 < controlLed.counter < 3:
+        if s > 0.7:
+          data = {
+            'carNumber' : '',
+            'carSpeed' : 0,
+            'date' : NOW,
+            'condition': '조건',
+            'img' : frame
+          }
+          pipeline.put(data)
         
 
     # DRAW LINES
@@ -135,6 +134,7 @@ def mainVideo(pipeline):
     }
     pipeline.put(data)
     """
+    cv2.imshow('roi', roi)
     
   capture.release()
   cv2.destroyAllWindows()
