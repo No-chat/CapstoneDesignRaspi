@@ -38,7 +38,7 @@ def num_extract(img_ori):
     imgGrayscalePlusTopHat = cv2.add(gray, imgTopHat)
     gray = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)
 
-    img_blurred = cv2.GaussianBlur(gray, ksize=(5, 5), sigmaX=0)
+    img_blurred = cv2.GaussianBlur(gray, ksize=(0,0), sigmaX=1)
 
     img_thresh = cv2.adaptiveThreshold(
         img_blurred, 
@@ -46,7 +46,7 @@ def num_extract(img_ori):
         adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
         thresholdType=cv2.THRESH_BINARY_INV, 
         blockSize=19, 
-        C=9
+        C=10
     )
 
     contours, _ = cv2.findContours(
